@@ -13,7 +13,7 @@ namespace Player
         private List<Transition> _currentTransitions = new List<Transition>();
         private List<Transition> _anyTransitions = new List<Transition>();
 
-        private static List<Transition> _emptyTransitions;
+        private static List<Transition> _emptyTransitions = new List<Transition>(0);
 
         public void Update()
         {
@@ -27,6 +27,10 @@ namespace Player
             _currentState?.Update();
         }
 
+        public void FixedUpdate()
+        {
+            _currentState?.FixedUpdate();
+        }
 
         public void SetState(IState state)
         {
@@ -38,8 +42,8 @@ namespace Player
 
             _transitions.TryGetValue(_currentState.GetType(), out _currentTransitions);
 
-            if (_currentTransitions == null)
-                _currentState.OnEnter();
+            _currentTransitions ??= _emptyTransitions;
+            _currentState.OnEnter();
         }
 
         public void AddTransition(IState originState, IState targetState, Func<bool> predicate)

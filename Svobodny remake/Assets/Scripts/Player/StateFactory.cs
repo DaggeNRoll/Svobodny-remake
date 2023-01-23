@@ -5,7 +5,7 @@ using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Player
+namespace Player.Factory
 {
     public abstract class State
     {
