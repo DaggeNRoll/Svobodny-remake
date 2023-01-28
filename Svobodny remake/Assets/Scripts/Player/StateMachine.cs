@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Player
 {
@@ -25,6 +26,7 @@ namespace Player
             }
 
             _currentState?.Update();
+            //Debug.Log(_currentState?.stateName);
         }
 
         public void FixedUpdate()

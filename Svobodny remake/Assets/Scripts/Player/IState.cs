@@ -9,6 +9,7 @@ namespace Player
         public void FixedUpdate();
         public void OnEnter();
         public void OnExit();
+        public string stateName { get; }
     }
 
     public abstract class InactiveState : IState
@@ -35,6 +36,8 @@ namespace Player
         {
             throw new System.NotImplementedException();
         }
+
+        public string stateName { get; set; }
     }
 
     public class DeadState : InactiveState
@@ -67,7 +70,7 @@ namespace Player
 
     public abstract class ActiveState : IState
     {
-        protected float _speed;
+
         protected int _noiseLevel;
 
         protected readonly Animator _animator;
@@ -75,39 +78,38 @@ namespace Player
         protected readonly Rigidbody2D _rigidbody;
         protected readonly int _horizontalSpeedHash = Animator.StringToHash("Horizontal speed");
         protected readonly int _verticalSpeedHash = Animator.StringToHash("Vertical speed");
+        protected readonly int _sneakHash = Animator.StringToHash("Sneak");
+        protected readonly int _runHash = Animator.StringToHash("Run");
 
         protected float _horizontalMove;
         protected float _verticalMove;
+
+        protected IInput _input;
+        protected IMovement _movement;
+        
         
 
-        protected ActiveState(float speed, int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody)
+        protected ActiveState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement)
         {
-            _speed = speed;
             _noiseLevel = noiseLevel;
             _animator = animator;
             _actor = actor;
             _rigidbody=rigidbody;
+            _input = input;
+            _movement = movement;
         }
         
         public virtual void Update()
         {
-            _horizontalMove = Input.GetAxisRaw("Horizontal");
-            _verticalMove = Input.GetAxisRaw("Vertical");
-            _animator.SetFloat(_horizontalSpeedHash,_horizontalMove);
-            _animator.SetFloat(_verticalSpeedHash,_verticalMove);
+            _input.HandleInput();
+            _animator.SetFloat(_horizontalSpeedHash,_input.HorizontalInput);
+            _animator.SetFloat(_verticalSpeedHash,_input.VerticalInput);
         }
 
         public virtual void FixedUpdate()
         {
-            if (_horizontalMove is > 0.1f or < -0.1f)
-            {
-                _rigidbody.AddForce(new Vector2(_horizontalMove*_speed,0f), ForceMode2D.Impulse);
-            }
-
-            if (_verticalMove is > 0.1f or < -0.1f)
-            {
-                _rigidbody.AddForce(new Vector2(0f,_verticalMove*_speed), ForceMode2D.Impulse);
-            }
+            _movement.FixedUpdate();
         }
 
         public virtual void OnEnter()
@@ -119,42 +121,84 @@ namespace Player
         {
             
         }
+
+        public string stateName { get; set; }
     }
 
     public class IdleState : ActiveState
     {
         
-        public IdleState(float speed, int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody)
-            : base(speed, noiseLevel, animator, actor, rigidbody)
+        public IdleState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement)
+            : base(noiseLevel, animator, actor, rigidbody, input, movement)
         {
-            
+            stateName = "idle";
         }
-        
-        
-        
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            
+            _movement.SetSpeedToDefaultSpeed();
+        }
     }
 
     public class SneakingState : ActiveState
     {
-        public SneakingState(float speed, int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody) 
-            : base(speed, noiseLevel, animator, actor, rigidbody)
+        public SneakingState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement) 
+            : base(noiseLevel, animator, actor, rigidbody, input, movement)
         {
+            stateName = "sneaking";
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            
+            _animator.SetBool(_sneakHash, true);
+            _movement.SetSpeedToSneakSpeed();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            
+            _animator.SetBool(_sneakHash, false);
         }
     }
 
     public class WalkingState : ActiveState
     {
-        public WalkingState(float speed, int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody) 
-            : base(speed, noiseLevel, animator, actor, rigidbody)
+        public WalkingState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement) 
+            : base(noiseLevel, animator, actor, rigidbody, input, movement)
         {
         }
     }
 
     public class RunningState : ActiveState
     {
-        public RunningState(float speed, int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody)
-            : base(speed, noiseLevel, animator, actor, rigidbody)
+        public RunningState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement)
+            : base(noiseLevel, animator, actor, rigidbody, input, movement)
         {
+            stateName = "running";
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            
+            _animator.SetBool(_runHash, true);
+            _movement.SetSpeedToRunSpeed();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            
+            _animator.SetBool(_runHash, false);
         }
     }
 }
