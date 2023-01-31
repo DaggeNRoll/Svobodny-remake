@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Player
 {
@@ -8,7 +9,10 @@ namespace Player
         public float VerticalInput { get; set; }
         public bool IsSneakingPressed { get; set; }
         public bool IsRunningPressed { get; set; }
+        public event EventHandler AttackEvent;
 
+
+        public bool IsAttackPressed { get; private set; }
 
         public void HandleInput()
         {
@@ -16,6 +20,16 @@ namespace Player
             VerticalInput = Input.GetAxisRaw("Vertical");
             IsSneakingPressed = Input.GetAxisRaw("Crouch")>0.01f;
             IsRunningPressed = Input.GetAxisRaw("Run")>0.01f;
+            
+            if (Input.GetButtonDown("Fire1"))
+            {
+                AttackEvent?.Invoke(this, EventArgs.Empty);
+                IsAttackPressed = true;
+            }
+            else
+            {
+                IsAttackPressed = false;
+            }
         }
         
     }

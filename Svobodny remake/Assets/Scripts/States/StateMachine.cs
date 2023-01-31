@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Player
-{
+
     public class StateMachine
     {
         private IState _currentState;
@@ -97,4 +96,3 @@ namespace Player
             }
         }
     }
-}

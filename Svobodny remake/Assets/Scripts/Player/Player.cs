@@ -1,9 +1,10 @@
 ﻿using System;
+using States.Player;
 using UnityEngine;
 
 namespace Player
 {
-    public class Player : Actor
+    public class Player : Actor, IDamageable
     {
         [SerializeField] private int _noiseLevel;
 
@@ -12,6 +13,7 @@ namespace Player
         private IState _sneakState;
         private IState _runState;
         private bool sneaking;
+        
 
         private void Awake()
         {
@@ -63,5 +65,7 @@ namespace Player
             _stateMachine.AddTransition(_sneakState,_runState,RunIsPressed());
             _stateMachine.AddTransition(_sneakState,_idleState,NothingIsPressed());
         }
+
+        
     }
 }
