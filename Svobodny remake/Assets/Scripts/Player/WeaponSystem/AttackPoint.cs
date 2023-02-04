@@ -3,20 +3,23 @@ using UnityEngine;
 
 namespace Player.WeaponSystem
 {
-    public class AttackPoint : MonoBehaviour
+    public class AttackPoint : MonoBehaviour, IAttackPoint
     {
-        private Weapon _parent;
+        [SerializeField] private GameObject _weaponGameObject;
+        
+        public Weapon Weapon { get; set; }
         private void Awake()
         {
-            _parent = GetComponentInParent<Weapon>();
+            
         }
 
         private void OnTriggerEnter2D(Collider2D col)
         {
             var target = col.gameObject.GetComponent<IDamageable>();
             
-            target?.ReduceHealth(_parent.Damage);
+            target?.ReduceHealth(Weapon.Damage);
         }
+
     }
     
     

@@ -12,6 +12,8 @@ public abstract class Actor : MonoBehaviour, IDamageable
     protected IInput input;
     [SerializeField] private int _health;
 
+    public event EventHandler AttackAnimationHasStopped;
+
     public int Health
     {
         get => _health;
@@ -33,4 +35,6 @@ public abstract class Actor : MonoBehaviour, IDamageable
     {
         //TODO
     }
+
+    public abstract void StopAttack(object sender, EventArgs e);
 }

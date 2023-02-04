@@ -16,5 +16,11 @@ namespace States
             base.OnEnter();
             _animator.SetTrigger(_attackHash);
         }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            
+        }
     }
 }

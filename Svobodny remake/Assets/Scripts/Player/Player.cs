@@ -66,6 +66,10 @@ namespace Player
             _stateMachine.AddTransition(_sneakState,_idleState,NothingIsPressed());
         }
 
-        
+
+        public override void StopAttack(object sender, EventArgs e)
+        {
+             
+        }
     }
 }

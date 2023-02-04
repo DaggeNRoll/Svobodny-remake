@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Player.WeaponSystem
@@ -26,14 +27,19 @@ namespace Player.WeaponSystem
         public void Start()
         {
             input = handler.Input;
-            input.AttackEvent += Attack;
+            input.AttackEvent += StartAttack;
 
             currentWeapon = weapons.FirstOrDefault();
         
             _timeSinceLastAttack = float.MaxValue;
         }
 
-        protected void Attack(object sender, EventArgs e)
+        private void Update()
+        {
+            _timeSinceLastAttack += Time.deltaTime;
+        }
+
+        protected void StartAttack(object sender, EventArgs e)
         {
             if(!weapons.Any())
                 return;
@@ -44,7 +50,13 @@ namespace Player.WeaponSystem
             if(_timeSinceLastAttack<currentWeapon.AttackRate)
                 return;
         
-            currentWeapon.Attack();
+            currentWeapon.StartAttack();
+            _timeSinceLastAttack = 0f;
+        }
+
+        protected void FinishAttack(object sender, EventArgs e)
+        {
+            
         }
     }
 }
