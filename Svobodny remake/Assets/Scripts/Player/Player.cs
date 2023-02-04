@@ -1,10 +1,13 @@
 ﻿using System;
+using Player.WeaponSystem;
+using States;
 using States.Player;
 using UnityEngine;
 
+
 namespace Player
 {
-    public class Player : Actor, IDamageable
+    public class Player : Actor
     {
         [SerializeField] private int _noiseLevel;
 
@@ -12,15 +15,17 @@ namespace Player
         private IState _idleState;
         private IState _sneakState;
         private IState _runState;
+        private WeaponSystem.WeaponSystem _weaponSystem;
         private bool sneaking;
         
 
         private void Awake()
         {
-            var rigidbody = GetComponent<Rigidbody2D>();
+            var rb = GetComponent<Rigidbody2D>();
             input = new PlayerInput();
             
-            _movement = new PlayerMovement(input, rigidbody, _speed, sneakSpeed, runSpeed);
+            _movement = new PlayerMovement(input, rb, _speed, sneakSpeed, runSpeed);
+            _weaponSystem = gameObject.GetComponent<PlayerWeaponSystem>();
 
             var mirrorWhenMovingLeft = GetComponent<MirrorWhenMovingLeft>();
 
@@ -32,9 +37,9 @@ namespace Player
 
             _stateMachine = new StateMachine();
 
-            _idleState = new IdleState(_noiseLevel, _animator, this, rigidbody, input, _movement);
-            _sneakState = new SneakingState(_noiseLevel, _animator, this, rigidbody, input, _movement);
-            _runState = new RunningState(_noiseLevel, _animator, this, rigidbody, input, _movement);
+            _idleState = new IdleState(_noiseLevel, _animator, this, rb, input, _movement, _weaponSystem);
+            _sneakState = new SneakingState(_noiseLevel, _animator, this, rb, input, _movement, _weaponSystem);
+            _runState = new RunningState(_noiseLevel, _animator, this, rb, input, _movement, _weaponSystem);
             
             SetTransitions();
 

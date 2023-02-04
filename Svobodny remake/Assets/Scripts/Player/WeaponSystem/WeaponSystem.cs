@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,8 +15,19 @@ namespace Player.WeaponSystem
         private float _timeSinceLastAttack;
         [SerializeField] protected Actor handler;
         protected IInput input;
+        [SerializeField] protected float attackAnimationDuration;
+        public event EventHandler<EquippedWeaponArgs> WeaponEquipped;
 
-        public abstract void EquipWeapon(Weapon weapon, Actor actor);
+        public class EquippedWeaponArgs : EventArgs
+        {
+            public string WeaponName { get; set; }
+        }
+
+        public virtual void EquipWeapon(Weapon weapon, Actor actor)
+        {
+            currentWeapon = weapon;
+            WeaponEquipped?.Invoke(this, new EquippedWeaponArgs {WeaponName = weapon.weaponName});
+        }
 
         public virtual void AddWeapon(Weapon weapon)
         {
@@ -27,7 +40,7 @@ namespace Player.WeaponSystem
         public void Start()
         {
             input = handler.Input;
-            input.AttackEvent += StartAttack;
+            input.AttackEvent += PerformAttack;
 
             currentWeapon = weapons.FirstOrDefault();
         
@@ -39,7 +52,19 @@ namespace Player.WeaponSystem
             _timeSinceLastAttack += Time.deltaTime;
         }
 
-        protected void StartAttack(object sender, EventArgs e)
+        protected void PerformAttack(object sender, EventArgs eventArgs)
+        {
+            StartAttack();
+            StartCoroutine(WaitForAttackAnimationCoroutine(attackAnimationDuration));
+            FinishAttack();
+        }
+
+        protected IEnumerator WaitForAttackAnimationCoroutine(float animationDurationInSeconds)
+        {
+            yield return new WaitForSeconds(animationDurationInSeconds);
+        }
+
+        protected void StartAttack()
         {
             if(!weapons.Any())
                 return;
@@ -54,9 +79,13 @@ namespace Player.WeaponSystem
             _timeSinceLastAttack = 0f;
         }
 
-        protected void FinishAttack(object sender, EventArgs e)
+        protected void FinishAttack()
         {
+            if (currentWeapon == null)
+                return;
             
+            currentWeapon.FinishAttack();
+            _timeSinceLastAttack = float.MaxValue;
         }
     }
 }

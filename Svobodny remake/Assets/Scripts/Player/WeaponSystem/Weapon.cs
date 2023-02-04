@@ -9,6 +9,7 @@ namespace Player.WeaponSystem
         [SerializeField] protected int damage;
         [SerializeField] protected GameObject attackPointPrefab;
         [SerializeField] protected int attackRate;
+        [SerializeField] public string weaponName;
 
         public int Damage => damage;
 

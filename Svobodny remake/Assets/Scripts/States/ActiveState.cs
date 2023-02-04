@@ -1,4 +1,6 @@
 ﻿using System;
+using Player.WeaponSystem;
+using Player.WeaponSystem.Weapons;
 using UnityEngine;
 
 namespace States
@@ -20,10 +22,11 @@ namespace States
 
         protected IInput _input;
         protected IMovement _movement;
+        protected WeaponSystem _weaponSystem;
 
 
         protected ActiveState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
-            IInput input, IMovement movement)
+            IInput input, IMovement movement, WeaponSystem weaponSystem)
         {
             _noiseLevel = noiseLevel;
             _animator = animator;
@@ -31,7 +34,8 @@ namespace States
             _rigidbody = rigidbody;
             _input = input;
             _movement = movement;
-
+            _weaponSystem = weaponSystem;
+            weaponSystem.WeaponEquipped += ChangeWeaponAnimation;
         }
 
         public virtual void Update()
@@ -52,6 +56,11 @@ namespace States
 
         public virtual void OnExit()
         {
+        }
+
+        protected virtual void ChangeWeaponAnimation(object sender, WeaponSystem.EquippedWeaponArgs equippedWeaponArgs)
+        {
+            _animator.SetTrigger(equippedWeaponArgs.WeaponName);
         }
 
         public string stateName { get; protected set; }

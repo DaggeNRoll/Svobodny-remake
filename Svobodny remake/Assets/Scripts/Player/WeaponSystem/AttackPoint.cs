@@ -1,11 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player.WeaponSystem
 {
     public class AttackPoint : MonoBehaviour, IAttackPoint
     {
-        [SerializeField] private GameObject _weaponGameObject;
+        [FormerlySerializedAs("_weaponGameObject")] [SerializeField] private GameObject weaponGameObject;
         
         public Weapon Weapon { get; set; }
         private void Awake()

@@ -1,19 +1,22 @@
-﻿using States;
+﻿using Player.WeaponSystem;
 using UnityEngine;
 
-public class IdleState : ActiveState
+namespace States
 {
-    public IdleState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
-        IInput input, IMovement movement)
-        : base(noiseLevel, animator, actor, rigidbody, input, movement)
+    public class IdleState : ActiveState
     {
-        stateName = "idle";
-    }
+        public IdleState(int noiseLevel, Animator animator, Actor actor, Rigidbody2D rigidbody,
+            IInput input, IMovement movement, WeaponSystem weaponSystem)
+            : base(noiseLevel, animator, actor, rigidbody, input, movement, weaponSystem)
+        {
+            stateName = "idle";
+        }
 
-    public override void OnEnter()
-    {
-        base.OnEnter();
+        public override void OnEnter()
+        {
+            base.OnEnter();
 
-        _movement.SetSpeedToDefaultSpeed();
+            _movement.SetSpeedToDefaultSpeed();
+        }
     }
 }
