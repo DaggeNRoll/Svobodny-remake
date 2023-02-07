@@ -2,6 +2,6 @@
 {
     public interface IAttackPoint
     {
-        public Weapon Weapon { get; set; }
+        public WeaponObject Weapon { get; set; }
     }
 }

@@ -43,6 +43,7 @@ namespace States
             _input.HandleInput();
             _animator.SetFloat(_horizontalSpeedHash, _input.HorizontalInput);
             _animator.SetFloat(_verticalSpeedHash, _input.VerticalInput);
+            //Debug.Log(stateName);
         }
 
         public virtual void FixedUpdate()

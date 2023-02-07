@@ -8,7 +8,7 @@ namespace Player.WeaponSystem
     {
         [FormerlySerializedAs("_weaponGameObject")] [SerializeField] private GameObject weaponGameObject;
         
-        public Weapon Weapon { get; set; }
+        public WeaponObject Weapon { get; set; }
         private void Awake()
         {
             

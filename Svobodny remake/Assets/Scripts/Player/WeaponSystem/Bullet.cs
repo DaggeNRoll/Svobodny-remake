@@ -6,7 +6,7 @@ namespace Player.WeaponSystem
 {
     public class Bullet : MonoBehaviour
     {
-        public Weapon Weapon { get; set; }
+        public WeaponObject Weapon { get; set; }
 
         [SerializeField] private float autoDestroyTime;
         private float _timeSinceShot;

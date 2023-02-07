@@ -4,7 +4,8 @@ namespace States
 {
     public class DeadState : InactiveState
     {
-        public DeadState(Animator animator, Actor actor, IInput input) : base(animator, actor, input)
+        public DeadState(Animator animator, Actor actor, IInput input, Rigidbody2D rigidbody2D, IMovement movement)
+            : base(animator, actor, input, rigidbody2D, movement)
         {
         }
         

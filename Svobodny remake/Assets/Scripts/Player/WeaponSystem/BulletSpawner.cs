@@ -6,11 +6,11 @@ namespace Player.WeaponSystem
 {
     public class BulletSpawner : MonoBehaviour, IAttackPoint
     {
-        private Weapon _parent;
+        private WeaponObject _parent;
         [FormerlySerializedAs("_bulletPrefab")] [SerializeField] private GameObject bulletPrefab;
         [FormerlySerializedAs("_shotSpeed")] [SerializeField] private float shotSpeed;
 
-        public Weapon Weapon { get; set; }
+        public WeaponObject Weapon { get; set; }
 
         private void OnEnable()
         {

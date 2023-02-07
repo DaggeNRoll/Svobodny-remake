@@ -1,10 +1,28 @@
-﻿namespace Player.WeaponSystem
+﻿using System;
+using UnityEngine;
+
+namespace Player.WeaponSystem
 {
     public class PlayerWeaponSystem : WeaponSystem
     {
-        public override void EquipWeapon(Weapon weapon, Actor actor)
+        [SerializeField] private GameObject arm;
+        [SerializeField] private Animator armAnimator;
+        
+        public override void EquipWeapon(Weapon weapon)
         {
+            base.EquipWeapon(currentWeapon);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            EquipWeapon(currentWeapon);
             
+        }
+
+        private void Aim()
+        {
+            //arm.SetActive(true);
         }
     }
 }

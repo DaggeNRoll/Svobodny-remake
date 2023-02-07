@@ -14,4 +14,5 @@ public interface IMovement
     void SetSpeedToSneakSpeed();
     void SetSpeedToRunSpeed();
     void SetSpeedToDefaultSpeed();
+    void StopActor();
 }

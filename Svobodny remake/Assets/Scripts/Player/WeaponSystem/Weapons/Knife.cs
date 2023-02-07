@@ -1,19 +1,29 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Player.WeaponSystem.Weapons
 {
-    [CreateAssetMenu(fileName = "knife", menuName = "knife", order = 0)]
     public class Knife : Weapon
     {
+        [SerializeField] private Collider2D attackCollider;
         public override void StartAttack()
         {
-            attackPointPrefab.SetActive(true);
-            attackPointPrefab.GetComponent<IAttackPoint>().Weapon = this;
+            attackCollider.enabled = true;
         }
 
         public override void FinishAttack()
         {
-            attackPointPrefab.SetActive(false);
+            attackCollider.enabled = false;
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if(col.gameObject.CompareTag("Player"))
+                return;
+            
+            var target = col.gameObject.GetComponent<IDamageable>();
+            
+            target?.ReduceHealth(weaponObject.Damage);
         }
     }
 }

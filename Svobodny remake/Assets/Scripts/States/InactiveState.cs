@@ -7,33 +7,37 @@ namespace States
         protected readonly Animator _animator;
         protected readonly Actor _actor;
         protected IInput _input;
+        protected Rigidbody2D _rigidbody2D;
+        protected IMovement _movement;
 
 
-        protected InactiveState(Animator animator, Actor actor, IInput input)
+        protected InactiveState(Animator animator, Actor actor, IInput input, Rigidbody2D rigidbody2D, IMovement movement)
         {
             _animator = animator;
             _actor = actor;
             _input = input;
+            _rigidbody2D = rigidbody2D;
+            _movement = movement;
         }
 
         public virtual void Update()
         {
-            throw new System.NotImplementedException();
+           // Debug.Log(stateName);
         }
 
         public virtual void FixedUpdate()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public virtual void OnEnter()
         {
-            throw new System.NotImplementedException();
+            _movement.StopActor();
         }
 
         public virtual void OnExit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public string stateName { get; set; }

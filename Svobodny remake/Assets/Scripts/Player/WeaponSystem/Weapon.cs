@@ -2,21 +2,16 @@
 
 namespace Player.WeaponSystem
 {
-    [CreateAssetMenu(menuName = "Weapons")]
-    public abstract class Weapon : ScriptableObject
+    public abstract class Weapon : MonoBehaviour
     {
-        [SerializeField] protected Sprite sprite;
-        [SerializeField] protected int damage;
-        [SerializeField] protected GameObject attackPointPrefab;
-        [SerializeField] protected int attackRate;
-        [SerializeField] public string weaponName;
+        [SerializeField] protected WeaponObject weaponObject;
 
-        public int Damage => damage;
+        [SerializeField] protected IAttackPoint attackPoint;
 
-
-        public int AttackRate { get=>attackRate; protected set => attackRate=value; }
-
+        public WeaponObject WeaponObject => weaponObject;
+        
         public abstract void StartAttack();
         public abstract void FinishAttack();
+        
     }
 }

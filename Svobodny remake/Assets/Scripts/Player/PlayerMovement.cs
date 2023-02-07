@@ -50,5 +50,10 @@ namespace Player
         {
             Speed = DefaultSpeed;
         }
+
+        public void StopActor()
+        {
+            Speed = 0;
+        }
     }
 }

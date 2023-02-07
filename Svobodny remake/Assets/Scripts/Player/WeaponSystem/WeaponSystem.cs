@@ -17,16 +17,23 @@ namespace Player.WeaponSystem
         protected IInput input;
         [SerializeField] protected float attackAnimationDuration;
         public event EventHandler<EquippedWeaponArgs> WeaponEquipped;
+        public event EventHandler AttackHasBeenFinished;
+        public event EventHandler AttackHasBeenStarted;
+        public event EventHandler ActorIsAiming;
+
+        public Weapon CurrentWeapon => currentWeapon;
 
         public class EquippedWeaponArgs : EventArgs
         {
             public string WeaponName { get; set; }
         }
 
-        public virtual void EquipWeapon(Weapon weapon, Actor actor)
+        public virtual void EquipWeapon(Weapon weapon)
         {
             currentWeapon = weapon;
-            WeaponEquipped?.Invoke(this, new EquippedWeaponArgs {WeaponName = weapon.weaponName});
+            WeaponEquipped?.Invoke(this, 
+                new EquippedWeaponArgs {WeaponName = currentWeapon.WeaponObject.weaponName});
+            
         }
 
         public virtual void AddWeapon(Weapon weapon)
@@ -36,8 +43,9 @@ namespace Player.WeaponSystem
         
             weapons.Add(weapon);
         }
+        
 
-        public void Start()
+        protected virtual void Start()
         {
             input = handler.Input;
             input.AttackEvent += PerformAttack;
@@ -52,16 +60,17 @@ namespace Player.WeaponSystem
             _timeSinceLastAttack += Time.deltaTime;
         }
 
-        protected void PerformAttack(object sender, EventArgs eventArgs)
+        public void PerformAttack(object sender, EventArgs eventArgs)
         {
             StartAttack();
             StartCoroutine(WaitForAttackAnimationCoroutine(attackAnimationDuration));
-            FinishAttack();
+            
         }
 
         protected IEnumerator WaitForAttackAnimationCoroutine(float animationDurationInSeconds)
         {
             yield return new WaitForSeconds(animationDurationInSeconds);
+            FinishAttack();
         }
 
         protected void StartAttack()
@@ -72,9 +81,12 @@ namespace Player.WeaponSystem
             if(currentWeapon==null)
                 return;
         
-            if(_timeSinceLastAttack<currentWeapon.AttackRate)
+            if(_timeSinceLastAttack<currentWeapon.WeaponObject.AttackRate)
                 return;
-        
+            
+            //Debug.LogWarning("start");
+            
+            AttackHasBeenStarted?.Invoke(this,EventArgs.Empty);
             currentWeapon.StartAttack();
             _timeSinceLastAttack = 0f;
         }
@@ -84,8 +96,11 @@ namespace Player.WeaponSystem
             if (currentWeapon == null)
                 return;
             
+            //Debug.LogWarning("finish");
+            
             currentWeapon.FinishAttack();
             _timeSinceLastAttack = float.MaxValue;
+            AttackHasBeenFinished?.Invoke(this, EventArgs.Empty);
         }
     }
 }
