@@ -1,4 +1,5 @@
-﻿using Player.WeaponSystem;
+﻿using Player;
+using Player.WeaponSystem;
 using UnityEngine;
 
 namespace States.Player

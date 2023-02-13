@@ -17,7 +17,7 @@ namespace Player.WeaponSystem
 
         public int AttackRate { get=>attackRate; protected set => attackRate=value; }
 
-        public abstract void StartAttack();
-        public abstract void FinishAttack();
+        /*public abstract void StartAttack();
+        public abstract void FinishAttack();*/
     }
 }

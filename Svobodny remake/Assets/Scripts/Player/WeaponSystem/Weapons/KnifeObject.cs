@@ -2,10 +2,10 @@
 
 namespace Player.WeaponSystem.Weapons
 {
-    [CreateAssetMenu(fileName = "knife", menuName = "knife", order = 0)]
+    [CreateAssetMenu(fileName = "knife", menuName = "weapon/knife", order = 0)]
     public class KnifeObject : WeaponObject
     {
-        public override void StartAttack()
+        /*public override void StartAttack()
         {
             attackPointPrefab.SetActive(true);
             attackPointPrefab.GetComponent<IAttackPoint>().Weapon = this;
@@ -14,6 +14,6 @@ namespace Player.WeaponSystem.Weapons
         public override void FinishAttack()
         {
             attackPointPrefab.SetActive(false);
-        }
+        }*/
     }
 }

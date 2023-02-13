@@ -30,7 +30,10 @@ namespace Player.WeaponSystem
 
         public virtual void EquipWeapon(Weapon weapon)
         {
+            // ReSharper disable once Unity.NoNullPropagation
+            currentWeapon?.OnUnequip();
             currentWeapon = weapon;
+            currentWeapon.OnEquip();
             WeaponEquipped?.Invoke(this, 
                 new EquippedWeaponArgs {WeaponName = currentWeapon.WeaponObject.weaponName});
             

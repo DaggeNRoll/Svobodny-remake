@@ -23,12 +23,15 @@ namespace Player
         private bool sneaking;
         private Arm arm;
         [SerializeField] private bool _attackIsFinished;
-        
+        [SerializeField] private Camera _mainCamera;
+
+        public PlayerInput PlayerInput => input as PlayerInput;
+
 
         private void Awake()
         {
             var rb = GetComponent<Rigidbody2D>();
-            input = new PlayerInput();
+            input = new PlayerInput(_mainCamera);
             
             _movement = new PlayerMovement(input, rb, _speed, sneakSpeed, runSpeed);
             _weaponSystem = gameObject.GetComponent<PlayerWeaponSystem>();

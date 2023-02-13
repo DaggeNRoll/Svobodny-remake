@@ -16,6 +16,16 @@ namespace Player.WeaponSystem.Weapons
             attackCollider.enabled = false;
         }
 
+        public override void OnEquip()
+        {
+            
+        }
+
+        public override void OnUnequip()
+        {
+            
+        }
+
         private void OnTriggerEnter2D(Collider2D col)
         {
             if(col.gameObject.CompareTag("Player"))

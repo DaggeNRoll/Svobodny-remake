@@ -12,6 +12,10 @@ namespace Player.WeaponSystem
         
         public abstract void StartAttack();
         public abstract void FinishAttack();
-        
+
+        public abstract void OnEquip();
+
+        public abstract void OnUnequip();
+
     }
 }

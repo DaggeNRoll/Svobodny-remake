@@ -7,7 +7,8 @@ namespace Player.WeaponSystem
     {
         [SerializeField] private GameObject arm;
         [SerializeField] private Animator armAnimator;
-        
+        public PlayerInput PlayerInput { get; private set; }
+
         public override void EquipWeapon(Weapon weapon)
         {
             base.EquipWeapon(currentWeapon);
@@ -16,6 +17,15 @@ namespace Player.WeaponSystem
         protected override void Start()
         {
             base.Start();
+            try
+            {
+                PlayerInput = input as PlayerInput;
+            }
+            catch (InvalidCastException)
+            {
+                throw new InvalidCastException("Класс должен быть типа PlayerInput");
+            }
+            
             EquipWeapon(currentWeapon);
             
         }

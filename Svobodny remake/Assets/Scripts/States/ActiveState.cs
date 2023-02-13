@@ -1,4 +1,5 @@
 ﻿using System;
+using Player;
 using Player.WeaponSystem;
 using Player.WeaponSystem.Weapons;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace States
         protected readonly int _verticalSpeedHash = Animator.StringToHash("Vertical speed");
         protected readonly int _sneakHash = Animator.StringToHash("Sneak");
         protected readonly int _runHash = Animator.StringToHash("Run");
+        protected readonly int _horizontalMousePositionHash = Animator.StringToHash("Horizontal mouse position");
+        protected readonly int _verticalMousePosition = Animator.StringToHash("Vertical mouse position");
 
         protected float _horizontalMove;
         protected float _verticalMove;
@@ -43,6 +46,18 @@ namespace States
             _input.HandleInput();
             _animator.SetFloat(_horizontalSpeedHash, _input.HorizontalInput);
             _animator.SetFloat(_verticalSpeedHash, _input.VerticalInput);
+
+            try
+            {
+                PlayerInput playerInput = _input as PlayerInput;
+                _animator.SetFloat(_horizontalMousePositionHash,playerInput.MousePosition.x);
+                _animator.SetFloat(_verticalMousePosition,playerInput.MousePosition.y);
+
+            }
+            catch (InvalidCastException)
+            {
+                throw new InvalidCastException("класс не является PLayerInput");
+            }
             //Debug.Log(stateName);
         }
 
